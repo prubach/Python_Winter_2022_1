@@ -10,7 +10,8 @@ print(s[:2])
 # last 2 characters
 print(s[-2:])
 print('-------------')
-s2 = 'abc\ndef\tfałąąśććęężgaga\tgwrgw'
+s2 = 'a\'bc\\ndef\\tfałąąśććęężgaga\tgwrgw'
+s2 = "a\"\'bc\ndef\\tfałąąśććęężgaga\tgwrgw"
 print(s2)
 
 print(ord('a'))
