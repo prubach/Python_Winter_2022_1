@@ -47,10 +47,24 @@ t = '55'
 tt = t + v
 print(tt)
 
-w = 10
-z = 8
+w = 12
+z = 12.0
 
-if w > z:
-    print('w > z')
+if w >= z:
+    print('w >= z')
 else:
-    print('w not > z')
+    print('w not >= z')
+
+w = 'abcebg'
+z = 'abc'
+
+if w == z:
+    print('w == z')
+else:
+    print('w not == z')
+
+
+y = 10 if w == 'abce' else 20
+print(f'y={y}')
+print('y={}'.format(y))
+#print('y=' + str(y))
