@@ -10,6 +10,16 @@ print(in_list[2])
 
 #TODO - sum all values in rows
 
+sum_col = [0,0,0]
+sum_row = [0,0,0]
+for count1, ele1 in enumerate(l_2d):
+    for count2, ele2 in enumerate(ele1):
+        sum_row[count1] += ele2
+        sum_col[count2] += ele2
+
+print(f'Sum rows: {sum_row}')
+print(f'Sum cols: {sum_col}')
+
 #TODO - sum elements of the whole list
 sum_all = 0
 for i in l_2d:
