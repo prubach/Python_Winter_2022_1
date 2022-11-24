@@ -18,3 +18,12 @@ with open(my_file, 'r') as f:
 
 print(s)
 print(m)
+
+# Writing...
+
+my_file = 'my_matrix_out.csv'
+#m = []
+with open(my_file, 'a') as f:
+    for r in m:
+        l = ';'.join([str(e) for e in r])
+        f.write(l + '\n')
