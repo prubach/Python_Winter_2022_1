@@ -6,7 +6,6 @@
 #             *
 from time import time
 
-n = 5
 
 # How many bowls do I have given the n - number of rows
 
@@ -30,13 +29,22 @@ def sum_bowls_seq(n):
     return int(((1+n)/2)*n)
 
 
-def time_func(func):
+def time_func(func, n):
     t0 = time()
-    func()
+    print('Calling: {}'.format(func))
+    print(func(n))
     t1 = time()
     elapsed = t1 - t0
     print('running {}, took: {}'.format(func, elapsed))
 
-print('Sum using sequence: {} sum={}'.format(n, sum_bowls_seq(n)))
-print('Sum using loop: {} sum={}'.format(n, sum_bowls_loop(n)))
-print('Sum using recursion: {} sum={}'.format(n, sum_bowls_recursive(n)))
+#n = 998
+
+n = 20000000
+
+time_func(sum_bowls_loop, n)
+time_func(sum_bowls_seq, n)
+#time_func(sum_bowls_recursive, n)
+
+#print('Sum using sequence: {} sum={}'.format(n, sum_bowls_seq(n)))
+#print('Sum using loop: {} sum={}'.format(n, sum_bowls_loop(n)))
+#print('Sum using recursion: {} sum={}'.format(n, sum_bowls_recursive(n)))
