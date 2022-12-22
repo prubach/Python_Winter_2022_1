@@ -32,9 +32,34 @@ class Account:
         return f'Acount[{self.id}, {self.customer.lastname}, {self._balance}]'
 
 
-c = Customer('John', 'Brown')
+class Bank:
+    def __init__(self):
+        self.account_list = []
+        self.customer_list = []
+
+    def create_customer(self, firstname, lastname):
+        c = Customer(firstname, lastname)
+        self.customer_list.append(c)
+        return c
+
+    def create_account(self, customer):
+        a = Account(customer)
+        self.account_list.append(a)
+        return a
+
+    def __repr__(self):
+        return f'Bank[{self.customer_list}, {self.account_list}]'
+
+
+bank = Bank()
+c = bank.create_customer('John', 'Brown')
 print(c)
-a1 = Account(c)
+a1 = bank.create_account(c)
 print(a1)
-a2 = Account(c)
+a2 = bank.create_account(c)
 print(a2)
+c2 = bank.create_customer('Anne', 'Smith')
+a3 = bank.create_account(c2)
+
+print(bank)
+
