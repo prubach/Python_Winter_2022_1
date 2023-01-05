@@ -22,25 +22,15 @@ class Account:
 
     def deposit(self, amount):
         if amount <= 0:
-            print('Amount is negative')
-            raise NegativeAmountException(f'Amount passed is negative: {amount}')
-            #return False
+            raise NegativeAmountException(f'Amount passed is negative: {amount}', amount)
         self._balance += amount
-        ##TODO Add implementation
-        #pass
-        return True
 
     def charge(self, amount):
         if amount <= 0:
-            print('Amount is negative')
-            return False
+            raise NegativeAmountException(f'Amount passed is negative: {amount}', amount)
         if amount > self._balance:
-            print('Not enough money')
-            return False
+            raise NotEnoughMoneyException(f'Is not enough money to charge : {amount}', amount)
         self._balance -= amount
-        ##TODO add implementation
-        #pass
-        return True
 
     def __repr__(self):
         return f'Acount[{self.id}, {self.customer.lastname}, {self._balance}]'
@@ -61,17 +51,28 @@ class Bank:
         self.account_list.append(a)
         return a
 
+    def transfer(self, from_account_id, to_account_id, amount):
+        #TODO implement by finding the appropriate accounts in self.account_list and then performing
+        # charge and deposit
+        pass
+
+
     def __repr__(self):
         return f'Bank[{self.customer_list}, {self.account_list}]'
 
 class BankException(Exception):
-    pass
+    def __init__(self, msg, amount):
+        super().__init__(msg)
+        self.amount = amount
+
 
 class NotEnoughMoneyException(BankException):
-    pass
+    def __init__(self, msg, amount):
+        super().__init__(msg, amount)
 
 class NegativeAmountException(BankException):
-    pass
+    def __init__(self, msg, amount):
+        super().__init__(msg, amount)
 
 
 bank = Bank()
@@ -83,21 +84,24 @@ print(a1)
 try:
     a = None
     #a.charge(2)
+    a1.charge(50)
+    #a1.charge(-220)
+    a1.charge(200)
+
     a1.deposit(-60)
-except NegativeAmountException as ne:
-    print(f'Negative amount!!! : {ne}')
-except Exception as e:
-    print(f'Exception was thrown: {e}')
+
+except BankException as my_ne:
+    print(f'Negative amount or not enough money!!! : {my_ne}')
+    print(f'Amount from exception: {my_ne.amount}')
+#except (NotEnoughMoneyException, NegativeAmountException) as ne:
+#    print(f'Negative amount or not enough money!!! : {ne}')
+#except Exception as e:
+#    print(f'Exception was thrown: {e}')
 
 # if a1.deposit(-60):
 #     print('Deposit to a1 succeeded')
 # else:
 #     print('Deposit to a1 not succeeded')
-
-if a1.charge(200):
-    print('Charge from a1 succeeded')
-else:
-    print('Charge from a1 not succeeded')
 a2 = bank.create_account(c)
 print(a2)
 c2 = bank.create_customer('Anne', 'Smith')
