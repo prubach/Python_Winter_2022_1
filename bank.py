@@ -57,6 +57,10 @@ class Bank:
         pass
 
 
+    def find_account(self, id):
+        # search through the self.accoun_list and return the account
+        pass
+
     def __repr__(self):
         return f'Bank[{self.customer_list}, {self.account_list}]'
 
