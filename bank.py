@@ -80,10 +80,20 @@ print(c)
 a1 = bank.create_account(c)
 a1.deposit(100)
 print(a1)
-if a1.deposit(-60):
-    print('Deposit to a1 succeeded')
-else:
-    print('Deposit to a1 not succeeded')
+try:
+    a = None
+    #a.charge(2)
+    a1.deposit(-60)
+except NegativeAmountException as ne:
+    print(f'Negative amount!!! : {ne}')
+except Exception as e:
+    print(f'Exception was thrown: {e}')
+
+# if a1.deposit(-60):
+#     print('Deposit to a1 succeeded')
+# else:
+#     print('Deposit to a1 not succeeded')
+
 if a1.charge(200):
     print('Charge from a1 succeeded')
 else:
