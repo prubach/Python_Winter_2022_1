@@ -21,12 +21,26 @@ class Account:
         self._balance = 0
 
     def deposit(self, amount):
-        #TODO Add implementation
-        pass
+        if amount <= 0:
+            print('Amount is negative')
+            raise NegativeAmountException(f'Amount passed is negative: {amount}')
+            #return False
+        self._balance += amount
+        ##TODO Add implementation
+        #pass
+        return True
 
     def charge(self, amount):
-        #TODO add implementation
-        pass
+        if amount <= 0:
+            print('Amount is negative')
+            return False
+        if amount > self._balance:
+            print('Not enough money')
+            return False
+        self._balance -= amount
+        ##TODO add implementation
+        #pass
+        return True
 
     def __repr__(self):
         return f'Acount[{self.id}, {self.customer.lastname}, {self._balance}]'
@@ -50,12 +64,30 @@ class Bank:
     def __repr__(self):
         return f'Bank[{self.customer_list}, {self.account_list}]'
 
+class BankException(Exception):
+    pass
+
+class NotEnoughMoneyException(BankException):
+    pass
+
+class NegativeAmountException(BankException):
+    pass
+
 
 bank = Bank()
 c = bank.create_customer('John', 'Brown')
 print(c)
 a1 = bank.create_account(c)
+a1.deposit(100)
 print(a1)
+if a1.deposit(-60):
+    print('Deposit to a1 succeeded')
+else:
+    print('Deposit to a1 not succeeded')
+if a1.charge(200):
+    print('Charge from a1 succeeded')
+else:
+    print('Charge from a1 not succeeded')
 a2 = bank.create_account(c)
 print(a2)
 c2 = bank.create_customer('Anne', 'Smith')
