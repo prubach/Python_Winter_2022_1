@@ -12,6 +12,8 @@ class Customer(Base):
     lastname = Column(String(50), nullable=False)
     email = Column(String(100), nullable=True)
     accounts = relationship('Account', back_populates='customer')
+    fk_bank_id = Column(Integer, ForeignKey('Bank.id'), index=True, nullable=False)
+    bank = relationship('Bank', back_populates='customers')
 
     def __init__(self, firstname, lastname, email):
         self.firstname = firstname
@@ -22,12 +24,14 @@ class Customer(Base):
         return f'Customer[{self.id}, {self.firstname}, {self.lastname}, {self.email}]'
 
 
-class Account:
+class Account(Base):
     __tablename__ = 'account'
     id = Column(Integer, primary_key=True, autoincrement=True)
     balance = Column(Float)
     fk_customer_id = Column(Integer, ForeignKey(Customer.id), index=True, nullable=False)
     customer = relationship(Customer, back_populates='accounts')
+    fk_bank_id = Column(Integer, ForeignKey('Bank.id'), index=True, nullable=False)
+    bank = relationship('Bank', back_populates='accounts')
 
     def __init__(self, customer):
         self.customer = customer
@@ -49,19 +53,24 @@ class Account:
         return f'Acount[{self.id}, {self.customer.lastname}, {self._balance}]'
 
 
-class Bank:
-    def __init__(self):
-        self.account_list = []
-        self.customer_list = []
+class Bank(Base):
+    __tablename__ = 'bank'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(80), nullable=False)
+    customers = relationship(Customer)
+    accounts = relationship(Account)
 
-    def create_customer(self, firstname, lastname):
-        c = Customer(firstname, lastname)
-        self.customer_list.append(c)
+    def __init__(self, name):
+        self.name = name
+
+    def create_customer(self, firstname, lastname, email):
+        c = Customer(firstname, lastname, email)
+        c.bank = self
         return c
 
     def create_account(self, customer):
         a = Account(customer)
-        self.account_list.append(a)
+        a.bank = self
         return a
 
     def transfer(self, from_account_id, to_account_id, amount):
@@ -77,6 +86,7 @@ class Bank:
     def __repr__(self):
         return f'Bank[{self.customer_list}, {self.account_list}]'
 
+
 class BankException(Exception):
     def __init__(self, msg, amount):
         super().__init__(msg)
@@ -91,38 +101,4 @@ class NegativeAmountException(BankException):
     def __init__(self, msg, amount):
         super().__init__(msg, amount)
 
-
-bank = Bank()
-c = bank.create_customer('John', 'Brown')
-print(c)
-a1 = bank.create_account(c)
-a1.deposit(100)
-print(a1)
-try:
-    a = None
-    #a.charge(2)
-    a1.charge(50)
-    #a1.charge(-220)
-    a1.charge(200)
-
-    a1.deposit(-60)
-
-except BankException as my_ne:
-    print(f'Negative amount or not enough money!!! : {my_ne}')
-    print(f'Amount from exception: {my_ne.amount}')
-#except (NotEnoughMoneyException, NegativeAmountException) as ne:
-#    print(f'Negative amount or not enough money!!! : {ne}')
-#except Exception as e:
-#    print(f'Exception was thrown: {e}')
-
-# if a1.deposit(-60):
-#     print('Deposit to a1 succeeded')
-# else:
-#     print('Deposit to a1 not succeeded')
-a2 = bank.create_account(c)
-print(a2)
-c2 = bank.create_customer('Anne', 'Smith')
-a3 = bank.create_account(c2)
-
-print(bank)
 
