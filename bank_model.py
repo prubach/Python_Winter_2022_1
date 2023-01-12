@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, create_engine, Float, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, sessionmaker
 
 Base = declarative_base()
 
@@ -102,3 +102,19 @@ class NegativeAmountException(BankException):
         super().__init__(msg, amount)
 
 
+class DBSession:
+    current_db_session = None
+
+    def engine(self):
+        url = 'sqlite:///bank.db'
+        return create_engine(url, echo=True)
+
+    def db_session(self):
+        if not DBSession.current_db_session:
+            Session = sessionmaker(bind=self.engine(), autocommit=False, autoflush=False)
+            current_db_session = Session()
+        return current_db_session
+
+def init_db():
+    db_session = DBSession()
+    Base.metadata.create_all(bind=db_session.engine())
