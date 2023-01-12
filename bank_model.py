@@ -12,7 +12,7 @@ class Customer(Base):
     lastname = Column(String(50), nullable=False)
     email = Column(String(100), nullable=True)
     accounts = relationship('Account', back_populates='customer')
-    fk_bank_id = Column(Integer, ForeignKey('Bank.id'), index=True, nullable=False)
+    fk_bank_id = Column(Integer, ForeignKey('bank.id'), index=True, nullable=False)
     bank = relationship('Bank', back_populates='customers')
 
     def __init__(self, firstname, lastname, email):
@@ -30,7 +30,7 @@ class Account(Base):
     balance = Column(Float)
     fk_customer_id = Column(Integer, ForeignKey(Customer.id), index=True, nullable=False)
     customer = relationship(Customer, back_populates='accounts')
-    fk_bank_id = Column(Integer, ForeignKey('Bank.id'), index=True, nullable=False)
+    fk_bank_id = Column(Integer, ForeignKey('bank.id'), index=True, nullable=False)
     bank = relationship('Bank', back_populates='accounts')
 
     def __init__(self, customer):
