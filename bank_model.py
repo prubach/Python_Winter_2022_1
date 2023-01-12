@@ -35,22 +35,24 @@ class Account(Base):
 
     def __init__(self, customer):
         self.customer = customer
-        self._balance = 0
+        self.balance = 0
 
     def deposit(self, amount):
         if amount <= 0:
             raise NegativeAmountException(f'Amount passed is negative: {amount}', amount)
-        self._balance += amount
+        if not self.balance:
+            self.balance = 0
+        self.balance += amount
 
     def charge(self, amount):
         if amount <= 0:
             raise NegativeAmountException(f'Amount passed is negative: {amount}', amount)
         if amount > self._balance:
             raise NotEnoughMoneyException(f'Is not enough money to charge : {amount}', amount)
-        self._balance -= amount
+        self.balance -= amount
 
     def __repr__(self):
-        return f'Acount[{self.id}, {self.customer.lastname}, {self._balance}]'
+        return f'Acount[{self.id}, {self.customer.lastname}, {self.balance}]'
 
 
 class Bank(Base):

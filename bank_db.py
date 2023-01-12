@@ -11,10 +11,36 @@ def initialize_db():
     return bank
 
 
+def add_data():
+    b = db.query(Bank).first()
+    c1 = b.create_customer('John', 'Brownie', 'john@brown.com')
+    db.add(c1)
+    a1 = b.create_account(c1)
+    db.add(a1)
+    c2 = b.create_customer('Anne', 'Smithson', 'anne@email.com')
+    db.add(c2)
+    a2 = b.create_account(c2)
+    db.add(a2)
+    db.commit()
+
+
+def query_db():
+    #custs = db.query(Customer).filter(Customer.lastname == 'Brown').all()
+    custs = db.query(Customer).filter(Customer.firstname == 'Anne').all()
+    for c1 in custs:
+        print(c1)
+        print(c1.accounts)
+        for a1 in c1.accounts:
+            a1.deposit(500)
+            db.merge(a1)
+    db.commit()
 
 
 if __name__ == '__main__':
-    initialize_db()
+    #initialize_db()
+    #add_data()
+    query_db()
+
 
 #ef add_
 
