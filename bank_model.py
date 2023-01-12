@@ -1,23 +1,36 @@
-class Customer:
-    last_id = 0
+from sqlalchemy import Column, Integer, String, create_engine, Float, ForeignKey
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
 
-    def __init__(self, firstname, lastname):
+Base = declarative_base()
+
+
+class Customer(Base):
+    __tablename__ = 'customer'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    firstname = Column(String(50), nullable=True)
+    lastname = Column(String(50), nullable=False)
+    email = Column(String(100), nullable=True)
+    accounts = relationship('Account', back_populates='customer')
+
+    def __init__(self, firstname, lastname, email):
         self.firstname = firstname
         self.lastname = lastname
-        Customer.last_id += 1
-        self.id = Customer.last_id
+        self.email = email
 
     def __repr__(self):
-        return f'Customer[{self.id}, {self.firstname}, {self.lastname}]'
+        return f'Customer[{self.id}, {self.firstname}, {self.lastname}, {self.email}]'
 
 
 class Account:
-    last_id = 1000
+    __tablename__ = 'account'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    balance = Column(Float)
+    fk_customer_id = Column(Integer, ForeignKey(Customer.id), index=True, nullable=False)
+    customer = relationship(Customer, back_populates='accounts')
 
     def __init__(self, customer):
         self.customer = customer
-        Account.last_id += 1
-        self.id = Account.last_id
         self._balance = 0
 
     def deposit(self, amount):
